@@ -1,7 +1,8 @@
 import { Locator, Page } from '@playwright/test';
+import { resolveCSSSelector } from '../helpers/resolve-css-selector.helper';
 
 export class WaitForExtensionsPage {
-  constructor(private page: Page) {}
+  constructor(private page: Page, private testId: string) {}
 
   /**
    * Waits for a selector for a specific timeout, continues execution without error afterwards.
@@ -17,31 +18,26 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForSelectorTimeout(selector: string, timeout: number) {
-    const currentTime: number = Date.now();
+    const startTime = Date.now();
 
-    const result = await this.page.waitForFunction<
-      boolean | Element,
-      [string, number, number]
-    >(
-      ([selector, timeout, currentTime]) => {
-        const results = document.querySelectorAll(selector);
+    let isRunning = true;
 
-        if (results.length > 1) {
-          throw new Error(
-            `Selector ${selector} results to more than one element, please check`
-          );
-        }
+    do {
+      const element = await this.page.$$(
+        resolveCSSSelector(selector, this.testId)
+      );
 
-        if (Date.now() - currentTime > timeout) return true;
+      if (Date.now() - startTime > timeout) {
+        isRunning = false;
+        return null;
+      }
 
-        if (results) return results?.[0];
+      if (element && element.length === 1) {
+        return element?.[0];
+      }
+    } while (isRunning);
 
-        return false;
-      },
-      [selector, timeout, currentTime]
-    );
-
-    return result.asElement();
+    throw new Error('Something went wrong, while waiting for selector');
   }
 
   /**
@@ -104,6 +100,23 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForTimeout(locator: Locator, timeout: number) {
-    return !!(await this.waitForSelectorTimeout(locator.toString(), timeout));
+    const startTime = Date.now();
+
+    let isRunning = true;
+
+    do {
+      const element = await locator.elementHandles();
+
+      if (Date.now() - startTime > timeout) {
+        isRunning = false;
+        return false;
+      }
+
+      if (element && element.length === 1) {
+        return true;
+      }
+    } while (isRunning);
+
+    throw new Error('Something went wrong, while waiting for selector');
   }
 }

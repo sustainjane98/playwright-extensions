@@ -2,7 +2,9 @@
   "name": "@playwright-extensions/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test-app:serve": "nx run test-app:serve"
+  },
   "private": true,
   "dependencies": {
     "@nx/next": "17.1.3",

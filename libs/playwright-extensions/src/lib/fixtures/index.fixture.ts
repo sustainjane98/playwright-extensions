@@ -6,8 +6,11 @@ export type PlaywrightExtensions = {
 };
 
 export const playwrightExtensions = base.extend<PlaywrightExtensions>({
-  playwrightExtensions: async ({ page }, use) => {
-    const playwrightExtensions = new PlaywrightExtensionsPage(page);
+  playwrightExtensions: async ({ page, testIdAttribute }, use) => {
+    const playwrightExtensions = new PlaywrightExtensionsPage(
+      page,
+      testIdAttribute
+    );
     await use(playwrightExtensions);
   },
 });
