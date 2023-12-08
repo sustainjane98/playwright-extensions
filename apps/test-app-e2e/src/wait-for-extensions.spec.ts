@@ -1,8 +1,8 @@
 import { Locator, expect } from '@playwright/test';
-import playwrightExtensions from 'libs/npm/playwright-extensions/src';
-import { TestIds } from 'libs/test/testids/src';
+import { common } from '@test/pages';
+import { TestIds } from '@test/ids';
 
-const test = playwrightExtensions;
+const test = common;
 
 test.describe('Wait For Extensions Test', () => {
   test.beforeEach(async ({ page }) => {
@@ -17,64 +17,45 @@ test.describe('Wait For Extensions Test', () => {
     });
 
     test('Wait for any of two subHeadlines Timeout', async ({
-      playwrightExtensions,
+      start,
       page,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
-
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
 
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBeDefined();
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
       test.fail();
 
-      const startTime = performance.now();
+      await start.waitForTimeout(subHeadline, 2500);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        2500
-      );
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(2500);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
+      await start.waitForTimeout(subHeadline, 6000);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        6000
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      start.expectToBeTrue();
+      start.checkTheExecutionTime();
       await expect(subHeadline).toHaveCount(1);
     });
   });
@@ -87,65 +68,45 @@ test.describe('Wait For Extensions Test', () => {
     });
 
     test('Wait for any of two subHeadlines Timeout', async ({
-      playwrightExtensions,
+      start,
       page,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
-
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
 
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBeDefined();
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
       test.fail();
 
-      const startTime = performance.now();
+      await start.waitForTimeout(subHeadline, 2500);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        2500
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(2500);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
+      await start.waitForTimeout(subHeadline, 6000);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        6000
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
   });
@@ -156,66 +117,43 @@ test.describe('Wait For Extensions Test', () => {
       input = page.getByLabel('test123');
     });
 
-    test('Wait for any of two inputs Timeout', async ({
-      playwrightExtensions,
-      page,
-    }) => {
+    test('Wait for any of two inputs Timeout', async ({ start, page }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
-      const startTime = performance.now();
-
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [input, page.locator('div.notExist')],
         6000
       );
 
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBeDefined();
-      expect(executionTime).toBeLessThanOrEqual(6000);
-      expect(await input.count()).toBe(1);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
+      await expect(input).toHaveCount(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
       test.fail();
 
-      const startTime = performance.now();
+      await start.waitForTimeout(input, 2500);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        input,
-        2500
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(2500);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
-      const startTime = performance.now();
+      await start.waitForTimeout(input, 6000);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        input,
-        6000
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
   });
@@ -226,66 +164,43 @@ test.describe('Wait For Extensions Test', () => {
       input = page.getByPlaceholder('test123@gmnx.de');
     });
 
-    test('Wait for any of two inputs Timeout', async ({
-      playwrightExtensions,
-      page,
-    }) => {
+    test('Wait for any of two inputs Timeout', async ({ start, page }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
-      const startTime = performance.now();
-
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [input, page.locator('div.notExist')],
         6000
       );
 
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBeDefined();
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
       test.fail();
 
-      const startTime = performance.now();
+      await start.waitForTimeout(input, 2500);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        input,
-        2500
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(2500);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
-      const startTime = performance.now();
+      await start.waitForTimeout(input, 6000);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        input,
-        6000
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
   });
@@ -298,65 +213,45 @@ test.describe('Wait For Extensions Test', () => {
     });
 
     test('Wait for any of two subHeadlines Timeout', async ({
-      playwrightExtensions,
+      start,
       page,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
-
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
 
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBeDefined();
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
       test.fail();
 
-      const startTime = performance.now();
+      await start.waitForTimeout(subHeadline, 2500);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        2500
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(2500);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
+      await start.waitForTimeout(subHeadline, 6000);
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        6000
-      );
-
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBe(true);
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
   });
@@ -369,55 +264,44 @@ test.describe('Wait For Extensions Test', () => {
     });
 
     test('Wait for any of two subHeadlines Timeout', async ({
-      playwrightExtensions,
+      start,
       page,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const startTime = performance.now();
-
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
 
-      const executionTime = performance.now() - startTime;
-
-      expect(headlineExists).toBeDefined();
-      expect(executionTime).toBeLessThanOrEqual(6000);
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
       test.fail();
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        2500
-      );
+      await start.waitForTimeout(subHeadline, 2500);
 
-      expect(headlineExists).toBe(true);
+      await start.expectToBeTrue();
+      await start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        6000
-      );
+      await start.waitForTimeout(subHeadline, 6000);
 
-      expect(headlineExists).toBe(true);
+      await start.expectToBeTrue();
       expect(await subHeadline.count()).toBe(1);
     });
   });
@@ -429,51 +313,43 @@ test.describe('Wait For Extensions Test', () => {
       imgTag = page.getByAltText('test1234');
     });
 
-    test('Wait for any of two inputs Timeout', async ({
-      playwrightExtensions,
-      page,
-    }) => {
+    test('Wait for any of two inputs Timeout', async ({ start, page }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!imgTag) return;
 
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [imgTag, page.locator('div.notExist')],
         6000
       );
 
-      expect(headlineExists).toBeDefined();
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await imgTag.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!imgTag) return;
 
       test.fail();
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        imgTag,
-        2500
-      );
+      await start.waitForTimeout(imgTag, 2500);
 
-      expect(headlineExists).toBe(true);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await imgTag.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!imgTag) return;
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        imgTag,
-        6000
-      );
+      await start.waitForTimeout(imgTag, 6000);
 
-      expect(headlineExists).toBe(true);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await imgTag.count()).toBe(1);
     });
   });
@@ -486,50 +362,45 @@ test.describe('Wait For Extensions Test', () => {
     });
 
     test('Wait for any of two subHeadlines Timeout', async ({
-      playwrightExtensions,
+      start,
       page,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const headlineExists = await playwrightExtensions.waitForAnyTimeout(
+      await start.waitForAnyTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
 
-      expect(headlineExists).toBeDefined();
+      await start.expectToBeDefined();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
-      playwrightExtensions,
+      start,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
       test.fail();
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        2500
-      );
+      await start.waitForTimeout(subHeadline, 2500);
 
-      expect(headlineExists).toBe(true);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
 
-    test('Wait For Timeout without soft error', async ({
-      playwrightExtensions,
-    }) => {
+    test('Wait For Timeout without soft error', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      const headlineExists = await playwrightExtensions.waitForTimeout(
-        subHeadline,
-        6000
-      );
+      await start.waitForTimeout(subHeadline, 6000);
 
-      expect(headlineExists).toBe(true);
+      await start.expectToBeTrue();
+      start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
   });

@@ -1,4 +1,4 @@
-import { TestIds } from 'test-ids';
+import { TestIds } from '@test/ids';
 import { WaitForToShowUpChildren } from '../components/wait-for-to-show-up-children';
 import styles from './page.module.css';
 
