@@ -15,8 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "playwright-extensions": ["libs/playwright-extensions/src/index.ts"],
-      "test-ids": ["libs/testids/src/index.ts"]
+      "@test/ids": ["libs/test/testids/src/index.ts"],
+      "@test/pages": ["libs/test/pages/src/index.ts"],
+      "playwright-extensions": ["libs/npm/playwright-extensions/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

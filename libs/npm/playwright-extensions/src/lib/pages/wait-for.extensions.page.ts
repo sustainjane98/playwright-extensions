@@ -1,5 +1,4 @@
 import { Locator, Page } from '@playwright/test';
-import { resolveCSSSelector } from '../helpers/resolve-css-selector.helper';
 
 export class WaitForExtensionsPage {
   constructor(private page: Page, private testId: string) {}
@@ -8,7 +7,7 @@ export class WaitForExtensionsPage {
    * Waits for a selector for a specific timeout, continues execution without error afterwards.
    *
    * ```ts
-   * const accountButton = await playwrightExtensions.waitForSelectorTimeout('*[data-testid="account-login-button"]', 5000);
+   * const accountButton = await playwrightExtensions.waitForSelectorTimeout('*[data-testid="account-login-button"]', 2500);
    *
    * if (accountButton) {
    *  // Add Testlogic for handling AccountButton here
@@ -18,24 +17,38 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForSelectorTimeout(selector: string, timeout: number) {
+    return await this.waitForLocatorsTimeout(
+      [this.page.locator(selector)],
+      timeout
+    );
+  }
+
+  private async waitForLocatorsTimeout(
+    locators: Awaited<ReturnType<(typeof this.page)['locator']>>[],
+    timeout: number
+  ) {
     const startTime = Date.now();
 
-    let isRunning = true;
-
-    do {
-      const element = await this.page.$$(
-        resolveCSSSelector(selector, this.testId)
-      );
-
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
       if (Date.now() - startTime > timeout) {
-        isRunning = false;
         return null;
       }
+      const elements = (
+        await Promise.all(
+          locators.map(async (locator) => await locator.elementHandles())
+        )
+      )
+        .flat()
+        .filter(async (element) => {
+          return await element.isVisible();
+        });
 
-      if (element && element.length === 1) {
-        return element?.[0];
+      if (elements && elements.length >= 1) {
+        return elements;
       }
-    } while (isRunning);
+      // eslint-disable-next-line no-constant-condition
+    }
 
     throw new Error('Something went wrong, while waiting for selector');
   }
@@ -44,7 +57,7 @@ export class WaitForExtensionsPage {
    * Waits for a selector for a specific timeout, continues execution with a non test blocking error afterwards.
    *
    * ```ts
-   * const accountButton = await playwrightExtensions.waitForSelectorTimeoutSoftError('*[data-testid="account-login-button"]', 5000);
+   * const accountButton = await playwrightExtensions.waitForSelectorTimeoutSoftError('*[data-testid="account-login-button"]', 2500);
    *
    * if (accountButton) {
    *  // Add Testlogic for handling AccountButton here
@@ -68,7 +81,7 @@ export class WaitForExtensionsPage {
    * Waits for a locator for a specific timeout, continues execution with a non test blocking error afterwards.
    *
    * ```ts
-   * const accountButtonExists = await playwrightExtensions.waitForTimeoutSoftError(this.page.getByTestId("account-login-button"), 5000);
+   * const accountButtonExists = await playwrightExtensions.waitForTimeoutSoftError(this.page.getByTestId("account-login-button"), 2500);
    *
    * if (accountButtonExists) {
    *  // Add Testlogic for handling AccountButton here
@@ -90,7 +103,7 @@ export class WaitForExtensionsPage {
    * Waits for a locator for a specific timeout, continues execution without error afterwards.
    *
    * ```ts
-   * const accountButtonExists = await playwrightExtensions.waitForTimeout(this.page.getByTestId("account-login-button"), 5000);
+   * const accountButtonExists = await playwrightExtensions.waitForTimeout(this.page.getByTestId("account-login-button"), 2500);
    *
    * if (accountButtonExists) {
    *  // Add Testlogic for handling AccountButton here
@@ -100,23 +113,10 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForTimeout(locator: Locator, timeout: number) {
-    const startTime = Date.now();
+    return !!(await this.waitForLocatorsTimeout([locator], timeout));
+  }
 
-    let isRunning = true;
-
-    do {
-      const element = await locator.elementHandles();
-
-      if (Date.now() - startTime > timeout) {
-        isRunning = false;
-        return false;
-      }
-
-      if (element && element.length === 1) {
-        return true;
-      }
-    } while (isRunning);
-
-    throw new Error('Something went wrong, while waiting for selector');
+  public async waitForAnyTimeout(locators: Locator[], timeout: number) {
+    return await this.waitForLocatorsTimeout(locators, timeout);
   }
 }

@@ -23,7 +23,21 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     testIdAttribute: 'data-testid',
+    video: { mode: 'on' },
+    screenshot: { mode: 'on' },
   },
+
+  workers: '70%',
+  reporter: [
+    ['list'],
+    [
+      'html',
+      {
+        open: 'on-failure',
+        outputFolder: '../../dist/.playwright/apps/test-app-e2e/report',
+      },
+    ],
+  ],
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npx nx serve test-app',
