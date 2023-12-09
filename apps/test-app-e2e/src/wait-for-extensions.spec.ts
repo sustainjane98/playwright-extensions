@@ -58,6 +58,55 @@ test.describe('Wait For Extensions Test', () => {
     });
   });
 
+  test.describe('IFrame', () => {
+    let subHeadline: Locator | null = null;
+
+    test.beforeEach(({ page }) => {
+      subHeadline = page.frameLocator('*[name="google"]').locator('html');
+    });
+
+    test('Wait for any of two subHeadlines Timeout', async ({
+      start,
+      page,
+    }) => {
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (!subHeadline) return;
+
+      await start.waitForAnyTimeout(
+        [subHeadline, page.locator('div.notExist')],
+        6000
+      );
+
+      await start.expectToExisting();
+      start.checkTheExecutionTime();
+      await expect(subHeadline).toHaveCount(1);
+    });
+
+    test('Wait For Timeout without soft error, should fail', async ({
+      start,
+    }) => {
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (!subHeadline) return;
+
+      await start.waitForTimeout(subHeadline, 2500);
+
+      await start.expectToTimeout();
+      start.checkTheExecutionTime();
+      await expect(subHeadline).toHaveCount(0);
+    });
+
+    test('Wait For Timeout without soft error', async ({ start }) => {
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (!subHeadline) return;
+
+      await start.waitForTimeout(subHeadline, 6000);
+
+      start.expectToExisting();
+      start.checkTheExecutionTime();
+      await expect(subHeadline).toHaveCount(1);
+    });
+  });
+
   test.describe('TestIds (not visible)', () => {
     let subHeadline: Locator | null = null;
 

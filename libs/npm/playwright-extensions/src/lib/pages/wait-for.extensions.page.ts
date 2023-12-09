@@ -19,10 +19,10 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForSelectorTimeout(selector: string, timeout: number) {
-    return await this.waitForLocatorsTimeout(
-      [this.page.locator(selector)],
-      timeout
-    );
+    return await this.waitForLocatorsTimeout({
+      locators: [this.page.locator(selector)],
+      timeout,
+    });
   }
 
   /**
@@ -42,18 +42,23 @@ export class WaitForExtensionsPage {
     selector: string,
     timeout: number
   ) {
-    return await this.waitForLocatorsTimeout(
-      [this.page.locator(selector)],
+    return await this.waitForLocatorsTimeout({
+      locators: [this.page.locator(selector)],
       timeout,
-      false
-    );
+      shouldExist: false,
+    });
   }
 
-  private async waitForLocatorsTimeout(
-    locators: Awaited<ReturnType<(typeof this.page)['locator']>>[],
-    timeout: number,
-    shouldExist = true
-  ) {
+  private async waitForLocatorsTimeout(options: {
+    locators: Locator[];
+    timeout: number;
+    shouldExist?: boolean;
+    attribute?: { key: keyof CSSStyleDeclaration; value: string | null };
+  }) {
+    const { locators, timeout } = options;
+    const shouldExist = options?.shouldExist ?? true;
+    const attribute = options?.attribute;
+
     try {
       return await new CircuitBreaker(
         async () => {
@@ -71,7 +76,25 @@ export class WaitForExtensionsPage {
                 (shouldExist && (await element.isVisible())) ||
                 !shouldExist
               ) {
-                filteredElements.push(element);
+                const getCSSProperty = async (
+                  key: keyof CSSStyleDeclaration
+                ) => {
+                  return await element.evaluate(
+                    (element, [key]) => {
+                      return window.getComputedStyle(element as Element)?.[key];
+                    },
+                    [key]
+                  );
+                };
+
+                if (
+                  (attribute &&
+                    (await getCSSProperty(attribute?.key)) ===
+                      attribute?.value) ||
+                  !attribute
+                ) {
+                  filteredElements.push(element);
+                }
               }
             }
 
@@ -84,6 +107,8 @@ export class WaitForExtensionsPage {
               if (shouldExist) return new WaitForResults(filteredElements);
               return WaitForResults.NOT_EXISTS;
             }
+
+            elements.forEach(async (elem) => await elem.dispose());
           }
         },
         { timeout }
@@ -153,7 +178,7 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForTimeout(locator: Locator, timeout: number) {
-    return await this.waitForLocatorsTimeout([locator], timeout);
+    return await this.waitForLocatorsTimeout({ locators: [locator], timeout });
   }
 
   /**
@@ -176,7 +201,7 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForAnyTimeout(locators: Locator[], timeout: number) {
-    return await this.waitForLocatorsTimeout(locators, timeout);
+    return await this.waitForLocatorsTimeout({ locators, timeout });
   }
 
   /**
@@ -193,7 +218,11 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForNotINDOMTimeout(locator: Locator, timeout: number) {
-    return await this.waitForLocatorsTimeout([locator], timeout, false);
+    return await this.waitForLocatorsTimeout({
+      locators: [locator],
+      timeout,
+      shouldExist: false,
+    });
   }
 
   /**
@@ -216,6 +245,38 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForAnyNotInDOMTimeout(locators: Locator[], timeout: number) {
-    return await this.waitForLocatorsTimeout(locators, timeout, false);
+    return await this.waitForLocatorsTimeout({
+      locators,
+      timeout,
+      shouldExist: false,
+    });
+  }
+
+  /**
+   * Waits for a locator attribute having a specific value in a specific timeout, continues execution without error afterwards.
+   *
+   * ```ts
+   * const accountButtonIsFlex = await playwrightExtensions.waitForTimeout(this.page.getByTestId("account-login-button"), 2500, {key: "display", value: "flex"});
+   *
+   * if (accountButtonIsFlex) {
+   *  // Add Testlogic for handling AccountButton here
+   * }
+   *
+   * // Continue with test execution here
+   * ```
+   */
+  public async waitForAttributeChangeTimeout(
+    locator: Locator,
+    timeout: number,
+    attribute: {
+      key: keyof CSSStyleDeclaration;
+      value: string | null;
+    }
+  ) {
+    return await this.waitForLocatorsTimeout({
+      locators: [locator],
+      timeout,
+      attribute,
+    });
   }
 }

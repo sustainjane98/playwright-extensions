@@ -1,6 +1,7 @@
 import { TestIds } from '@test/ids';
 import { WaitForToShowUpChildren } from '../components/wait-for-to-show-up-children';
 import styles from './page.module.css';
+import { AddCSSStyleByTime } from '../components/add-css-style-by-time';
 
 export default async function Index() {
   /*
@@ -51,7 +52,14 @@ export default async function Index() {
           <span>Test1234</span>
         </h3>
       </WaitForToShowUpChildren>
-      <iframe name="google" src="https://google.de"></iframe>
+      <WaitForToShowUpChildren timeout={5000}>
+        <iframe name="google" src="https://google.de"></iframe>
+      </WaitForToShowUpChildren>
+      <AddCSSStyleByTime
+        style={{ key: 'visibility', value: 'hidden' }}
+        timeout={5000}
+        data-testid={TestIds.WAIT_FOR_CSS_CHANGE}
+      />
     </div>
   );
 }

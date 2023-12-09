@@ -14,8 +14,8 @@ test.describe('Wait for Selectors', () => {
 
     await start.waitForSelectorTimeout(selector, 6000);
 
-    start.expectToExisting();
+    await start.expectToExisting();
     start.checkTheExecutionTime();
-    expect(page.locator(selector)).toBeDefined();
+    await expect(page.locator(selector)).toBeDefined();
   });
 });

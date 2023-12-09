@@ -110,4 +110,24 @@ export class StartPage {
         );
     });
   }
+
+  public async waitForAttributeChangeTimeout(
+    locator: Locator,
+    timeout: number,
+    attribute: {
+      key: keyof CSSStyleDeclaration;
+      value: string | null;
+    }
+  ) {
+    this.duration = timeout;
+
+    await this.measureTime(async () => {
+      this.element =
+        await this.playwrightExtensions.waitForAttributeChangeTimeout(
+          locator,
+          timeout,
+          attribute
+        );
+    });
+  }
 }

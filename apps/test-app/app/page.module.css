@@ -1,2 +1,5 @@
 .page {
+  display: flex;
+  justify-items: start;
+  align-items: start;
 }
