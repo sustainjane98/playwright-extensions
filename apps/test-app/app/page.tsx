@@ -60,6 +60,11 @@ export default async function Index() {
         timeout={5000}
         data-testid={TestIds.WAIT_FOR_CSS_CHANGE}
       />
+      <AddCSSStyleByTime
+        style={{ key: 'backgroundColor', value: '#fff' }}
+        timeout={5000}
+        data-testid={TestIds.WAIT_FOR_CSS_CHANGE_COLOR}
+      />
     </div>
   );
 }

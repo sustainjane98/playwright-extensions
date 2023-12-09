@@ -27,7 +27,7 @@ test.describe('Wait For CSS Property Change', () => {
 
     await start.waitForAttributeChangeTimeout(element, 6000, {
       key: 'backgroundColor',
-      value: '#fff',
+      value: 'rgb(255, 255, 255)',
     });
 
     await start.expectToExisting();
