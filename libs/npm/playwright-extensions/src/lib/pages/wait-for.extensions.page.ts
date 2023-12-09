@@ -74,7 +74,8 @@ export class WaitForExtensionsPage {
             for (const element of elements) {
               if (
                 (shouldExist && (await element.isVisible())) ||
-                !shouldExist
+                !shouldExist ||
+                (shouldExist && attribute)
               ) {
                 const getCSSProperty = async (
                   key: keyof CSSStyleDeclaration
