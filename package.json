@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "test-app:serve": "nx run test-app:serve"
+    "test-app:serve": "nx run test-app:serve",
+    "playwright-extensions:publish": "nx run playwright-extensions:publish"
   },
   "private": true,
   "dependencies": {
