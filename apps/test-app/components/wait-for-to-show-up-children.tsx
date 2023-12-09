@@ -3,6 +3,7 @@ import React, { PropsWithChildren, useEffect, useState } from 'react';
 
 export interface Props extends PropsWithChildren {
   timeout: number;
+  becomeHiddenInstead?: boolean;
 }
 
 /**
@@ -13,14 +14,17 @@ export interface Props extends PropsWithChildren {
 export const WaitForToShowUpChildren: React.FC<Props> = ({
   children,
   timeout,
+  becomeHiddenInstead,
 }) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(becomeHiddenInstead ? true : false);
 
   useEffect(() => {
     window.setTimeout(() => {
-      setShow(true);
+      setShow(becomeHiddenInstead ? false : true);
     }, timeout);
-  }, [timeout]);
+  }, [timeout, becomeHiddenInstead]);
 
   return show ? children : undefined;
 };
+
+WaitForToShowUpChildren.defaultProps = { becomeHiddenInstead: false };

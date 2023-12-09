@@ -1,4 +1,6 @@
-import { Locator, Page } from '@playwright/test';
+import { ElementHandle, Locator, Page } from '@playwright/test';
+import { WaitForResults } from '../..';
+import CircuitBreaker from 'opossum';
 
 export class WaitForExtensionsPage {
   constructor(private page: Page) {}
@@ -52,36 +54,43 @@ export class WaitForExtensionsPage {
     timeout: number,
     shouldExist = true
   ) {
-    const startTime = Date.now();
+    try {
+      return await new CircuitBreaker(
+        async () => {
+          while (true) {
+            const elements = (
+              await Promise.all(
+                locators.map(async (locator) => await locator.elementHandles())
+              )
+            ).flat();
 
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      if (Date.now() - startTime > timeout) {
-        return null;
-      }
-      const elements = (
-        await Promise.all(
-          locators.map(async (locator) => await locator.elementHandles())
-        )
-      )
-        .flat()
-        .filter(async (element) => {
-          return shouldExist
-            ? await element.isVisible()
-            : await element.isHidden();
-        });
+            const filteredElements: typeof elements = [];
 
-      if (shouldExist && elements && elements.length >= 1) {
-        return elements;
-      }
+            for (const element of elements) {
+              if (
+                (shouldExist && (await element.isVisible())) ||
+                !shouldExist
+              ) {
+                filteredElements.push(element);
+              }
+            }
 
-      if ((!shouldExist && elements && elements.length >= 1) || !elements) {
-        return null;
-      }
-      // eslint-disable-next-line no-constant-condition
+            if (
+              (shouldExist &&
+                filteredElements &&
+                filteredElements.length >= 1) ||
+              (!shouldExist && (filteredElements?.length ?? 0) === 0)
+            ) {
+              if (shouldExist) return new WaitForResults(filteredElements);
+              return WaitForResults.NOT_EXISTS;
+            }
+          }
+        },
+        { timeout }
+      ).fire();
+    } catch (err) {
+      return WaitForResults.TIMEOUT;
     }
-
-    throw new Error('Something went wrong, while waiting for selector');
   }
 
   /**
@@ -144,7 +153,7 @@ export class WaitForExtensionsPage {
    * ```
    */
   public async waitForTimeout(locator: Locator, timeout: number) {
-    return !!(await this.waitForLocatorsTimeout([locator], timeout));
+    return await this.waitForLocatorsTimeout([locator], timeout);
   }
 
   /**
@@ -183,8 +192,8 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForNotExistTimeout(locator: Locator, timeout: number) {
-    return !!(await this.waitForLocatorsTimeout([locator], timeout, false));
+  public async waitForNotINDOMTimeout(locator: Locator, timeout: number) {
+    return await this.waitForLocatorsTimeout([locator], timeout, false);
   }
 
   /**
@@ -206,7 +215,7 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForAnyNotExistTimeout(locators: Locator[], timeout: number) {
+  public async waitForAnyNotInDOMTimeout(locators: Locator[], timeout: number) {
     return await this.waitForLocatorsTimeout(locators, timeout, false);
   }
 }

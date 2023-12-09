@@ -28,9 +28,9 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
-      expect(await subHeadline.count()).toBe(1);
+      await expect(subHeadline).toHaveCount(1);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
@@ -39,13 +39,11 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      test.fail();
-
       await start.waitForTimeout(subHeadline, 2500);
 
-      await start.expectToBeDefined();
+      await start.expectToTimeout();
       start.checkTheExecutionTime();
-      expect(await subHeadline.count()).toBe(1);
+      await expect(subHeadline).toHaveCount(0);
     });
 
     test('Wait For Timeout without soft error', async ({ start }) => {
@@ -54,9 +52,47 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 6000);
 
-      start.expectToBeTrue();
+      start.expectToExisting();
       start.checkTheExecutionTime();
       await expect(subHeadline).toHaveCount(1);
+    });
+  });
+
+  test.describe('TestIds (not visible)', () => {
+    let subHeadline: Locator | null = null;
+
+    test.beforeEach(({ page }) => {
+      subHeadline = page.getByTestId(TestIds.WAIT_FOR_DISAPPEAR);
+    });
+
+    test('Wait for any of two subHeadlines Timeout', async ({
+      start,
+      page,
+    }) => {
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (!subHeadline) return;
+
+      await start.waitForAnyNotInDOMTimeout(
+        [subHeadline, page.locator('div.notExist')],
+        6000
+      );
+
+      await start.expectToNotExisting();
+      start.checkTheExecutionTime();
+      await expect(subHeadline).toBeHidden();
+      await expect(subHeadline).toHaveCount(0);
+    });
+
+    test('Wait For Timeout without soft error', async ({ start }) => {
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (!subHeadline) return;
+
+      await start.waitForNotINDOMTimeout(subHeadline, 6000);
+
+      await start.expectToNotExisting();
+      start.checkTheExecutionTime();
+      await expect(subHeadline).toBeHidden();
+      await expect(subHeadline).toHaveCount(0);
     });
   });
 
@@ -79,7 +115,7 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -90,13 +126,11 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      test.fail();
-
       await start.waitForTimeout(subHeadline, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToTimeout();
       start.checkTheExecutionTime();
-      expect(await subHeadline.count()).toBe(1);
+      await expect(subHeadline).toHaveCount(0);
     });
 
     test('Wait For Timeout without soft error', async ({ start }) => {
@@ -105,9 +139,9 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
-      expect(await subHeadline.count()).toBe(1);
+      await expect(subHeadline).toHaveCount(1);
     });
   });
 
@@ -126,9 +160,10 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       await expect(input).toHaveCount(1);
+      await expect(page.locator('div.notExist')).toHaveCount(0);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
@@ -141,7 +176,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(input, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
@@ -152,7 +187,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(input, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
@@ -173,9 +208,10 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
+      await expect(page.locator('div.notExist')).toHaveCount(0);
     });
 
     test('Wait For Timeout without soft error, should fail', async ({
@@ -188,7 +224,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(input, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
@@ -199,7 +235,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(input, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await input.count()).toBe(1);
     });
@@ -224,7 +260,7 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -239,7 +275,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -250,7 +286,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -275,7 +311,7 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -290,7 +326,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       await start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -301,7 +337,8 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
+      await start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
   });
@@ -322,7 +359,7 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await imgTag.count()).toBe(1);
     });
@@ -337,7 +374,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(imgTag, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await imgTag.count()).toBe(1);
     });
@@ -348,7 +385,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(imgTag, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await imgTag.count()).toBe(1);
     });
@@ -373,7 +410,7 @@ test.describe('Wait For Extensions Test', () => {
         6000
       );
 
-      await start.expectToBeDefined();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -388,7 +425,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 2500);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
@@ -399,7 +436,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 6000);
 
-      await start.expectToBeTrue();
+      await start.expectToExisting();
       start.checkTheExecutionTime();
       expect(await subHeadline.count()).toBe(1);
     });
