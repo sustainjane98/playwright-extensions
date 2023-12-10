@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus build"
+        "command": "npx docusaurus build --out-dir ../../dist/docs/playwright-extensions"
       }
     },
     "start": {
@@ -26,11 +26,27 @@
       },
       "dependsOn": ["build"]
     },
+    "clear": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "npx docusaurus clear --siteDir ../../dist/docs/playwright-extensions"
+      },
+      "dependsOn": ["build"]
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "npx docusaurus deploy --out-dir ../../dist/docs/playwright-extensions"
+      },
+      "dependsOn": ["build"]
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus serve"
+        "command": "npx docusaurus serve --dir ../../dist/docs/playwright-extensions/build"
       }
     },
     "lint": {
