@@ -17,7 +17,7 @@
     "paths": {
       "@test/ids": ["libs/test/testids/src/index.ts"],
       "@test/pages": ["libs/test/pages/src/index.ts"],
-      "playwright-extensions": ["libs/npm/playwright-extensions/src/index.ts"]
+      "playwright-extensions": ["dist/libs/playwright-extensions"]
     }
   },
   "exclude": ["node_modules", "tmp"]

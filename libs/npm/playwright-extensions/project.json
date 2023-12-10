@@ -1,7 +1,7 @@
 {
   "name": "playwright-extensions",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/playwright-extensions/src",
+  "sourceRoot": "libs/npm/playwright-extensions/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -13,7 +13,7 @@
     },
     "publish": {
       "command": "node tools/scripts/publish.mjs playwright-extensions {args.ver} {args.tag}",
-      "dependsOn": ["build"]
+      "dependsOn": ["build", "docs"]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

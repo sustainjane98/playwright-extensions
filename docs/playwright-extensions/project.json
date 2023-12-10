@@ -1,0 +1,48 @@
+{
+  "name": "docs/playwright-extensions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "docs/playwright-extensions/src",
+  "projectType": "application",
+  "targets": {
+    "docusaurus": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "npx docusaurus"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "npx docusaurus build"
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "npx docusaurus start"
+      },
+      "dependsOn": ["build"]
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "npx docusaurus serve"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/playwright-extensions/**/*.ts",
+          "libs/playwright-extensions/package.json"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

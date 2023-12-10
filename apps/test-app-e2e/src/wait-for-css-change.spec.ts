@@ -1,4 +1,4 @@
-import { Locator, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { TestIds } from '@test/ids';
 import { common } from '@test/pages';
 

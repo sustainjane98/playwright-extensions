@@ -4,10 +4,16 @@
   "license": "MIT",
   "scripts": {
     "test-app:serve": "nx run test-app:serve",
-    "playwright-extensions:publish": "nx run playwright-extensions:publish"
+    "playwright-extensions:publish": "nx run playwright-extensions:publish",
+    "docs/playwright-extensions:start": "nx run docs/playwright-extensions:start"
   },
   "private": true,
   "dependencies": {
+    "@docusaurus/core": "3.0.1",
+    "@docusaurus/preset-classic": "3.0.1",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.0.0",
+    "prism-react-renderer": "^2.3.0",
     "@nx/next": "17.1.3",
     "next": "13.4.1",
     "react": "18.2.0",
@@ -15,6 +21,9 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@docusaurus/module-type-aliases": "3.0.1",
+    "@docusaurus/tsconfig": "3.0.1",
+    "@docusaurus/types": "3.0.1",
     "@nx/devkit": "17.1.3",
     "@nx/eslint": "17.1.3",
     "@nx/eslint-plugin": "17.1.3",
