@@ -31,8 +31,7 @@
       "options": {
         "cwd": "docs/playwright-extensions",
         "command": "npx docusaurus clear --siteDir ../../dist/docs/playwright-extensions"
-      },
-      "dependsOn": ["build"]
+      }
     },
     "deploy": {
       "executor": "nx:run-commands",
