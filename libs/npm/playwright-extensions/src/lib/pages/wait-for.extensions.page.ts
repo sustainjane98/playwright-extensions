@@ -33,13 +33,9 @@ export class WaitForExtensionsPage {
           }
 
           const resolvedLocators = locators.map(async (locator) => {
-            await expect.soft(locator).toHaveCount(0, { timeout });
+            await expect.soft(locator).toBeHidden({ timeout: timeout - 500 });
             return WaitForResults.NOT_EXISTS;
           });
-
-          if (shouldExist === Exist.ANY_OR_ONE_NOT_EXIST) {
-            return await Promise.any(resolvedLocators);
-          }
 
           const result = await Promise.all(resolvedLocators);
           return result?.[0];

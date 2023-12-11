@@ -66,7 +66,7 @@ test.describe('Wait For Extensions Test', () => {
       subHeadline = page.getByTestId(TestIds.WAIT_FOR_DISAPPEAR);
     });
 
-    test('Wait for any of two subHeadlines Timeout', async ({
+    test('Wait for all of two subHeadlines Timeout disappear', async ({
       start,
       page,
     }) => {
@@ -84,24 +84,29 @@ test.describe('Wait For Extensions Test', () => {
       await expect(subHeadline).toBeHidden();
     });
 
-    test('Wait For Timeout without soft error, should fail', async ({
+    test('Wait for any of two subHeadlines Timeout disappear', async ({
       start,
+      page,
     }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitForTimeout(subHeadline, 2500, false);
+      await start.waitForMultipleTimeout(
+        [subHeadline, page.locator('html')],
+        10000,
+        Exist.ALL_OR_ONE_NOT_EXIST
+      );
 
-      await start.expectToExisting();
+      await start.expectToNotExisting();
       start.checkTheExecutionTime();
-      await expect(subHeadline).toHaveCount(1);
+      await expect(subHeadline).toBeHidden();
     });
 
-    test('Wait For Timeout without soft error', async ({ start }) => {
+    test('Wait single element disappear', async ({ start }) => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitForTimeout(subHeadline, 6000, false);
+      await start.waitForTimeout(subHeadline, 6000, Exist.ALL_OR_ONE_NOT_EXIST);
 
       start.expectToNotExisting();
       start.checkTheExecutionTime();
