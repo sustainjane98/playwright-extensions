@@ -33,7 +33,7 @@ export class WaitForExtensionsPage {
           }
 
           const resolvedLocators = locators.map(async (locator) => {
-            await expect.soft(locator).toBeHidden({ timeout: timeout - 500 });
+            await expect.soft(locator).toBeHidden({ timeout: timeout });
             return WaitForResults.NOT_EXISTS;
           });
 
