@@ -24,6 +24,10 @@ export class WaitForResults<T> {
     return this.value === 'TIMEOUT';
   }
 
+  isNotExisting(): boolean {
+    return this.value === 'NOT_EXISTS';
+  }
+
   static TIMEOUT = new WaitForResults('TIMEOUT');
   static NOT_EXISTS = new WaitForResults('NOT_EXISTS');
 }
