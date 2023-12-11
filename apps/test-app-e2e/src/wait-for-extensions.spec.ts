@@ -107,44 +107,6 @@ test.describe('Wait For Extensions Test', () => {
     });
   });
 
-  test.describe('TestIds (not visible)', () => {
-    let subHeadline: Locator | null = null;
-
-    test.beforeEach(({ page }) => {
-      subHeadline = page.getByTestId(TestIds.WAIT_FOR_DISAPPEAR);
-    });
-
-    test('Wait for any of two subHeadlines Timeout', async ({
-      start,
-      page,
-    }) => {
-      // eslint-disable-next-line playwright/no-conditional-in-test
-      if (!subHeadline) return;
-
-      await start.waitForAnyNotInDOMTimeout(
-        [subHeadline, page.locator('div.notExist')],
-        6000
-      );
-
-      await start.expectToNotExisting();
-      start.checkTheExecutionTime();
-      await expect(subHeadline).toBeHidden();
-      await expect(subHeadline).toHaveCount(0);
-    });
-
-    test('Wait For Timeout without soft error', async ({ start }) => {
-      // eslint-disable-next-line playwright/no-conditional-in-test
-      if (!subHeadline) return;
-
-      await start.waitForNotINDOMTimeout(subHeadline, 6000);
-
-      await start.expectToNotExisting();
-      start.checkTheExecutionTime();
-      await expect(subHeadline).toBeHidden();
-      await expect(subHeadline).toHaveCount(0);
-    });
-  });
-
   test.describe('Title', () => {
     let subHeadline: Locator | null = null;
 

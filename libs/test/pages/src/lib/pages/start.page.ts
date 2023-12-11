@@ -1,11 +1,11 @@
-import { ElementHandle, Locator, Page, expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import {
   PlaywrightExtensionsPage,
   WaitForResults,
 } from 'playwright-extensions';
 
 export class StartPage {
-  private element: WaitForResults<string | ElementHandle<Node>[]> | null = null;
+  private element: WaitForResults<string | Locator> | null = null;
   private executionTime: number = 0;
   private duration: number = 0;
 
@@ -68,66 +68,9 @@ export class StartPage {
     });
   }
 
-  public async waitForAnyNotInDOMTimeout(locators: Locator[], timeout: number) {
-    this.duration = timeout;
-
-    await this.measureTime(async () => {
-      this.element = await this.playwrightExtensions.waitForAnyNotInDOMTimeout(
-        locators,
-        timeout
-      );
-    });
-  }
-
-  public async waitForNotINDOMTimeout(locator: Locator, timeout: number) {
-    this.duration = timeout;
-
-    await this.measureTime(async () => {
-      this.element = await this.playwrightExtensions.waitForNotINDOMTimeout(
-        locator,
-        timeout
-      );
-    });
-  }
-
   private async measureTime(callback: () => Promise<void>) {
     const startTime = performance.now();
     await callback();
     this.executionTime = performance.now() - startTime;
-  }
-
-  public async waitForSelectorNotExistTimeout(
-    selector: string,
-    timeout: number
-  ) {
-    this.duration = timeout;
-
-    await this.measureTime(async () => {
-      this.element =
-        await this.playwrightExtensions.waitForSelectorNotExistTimeout(
-          selector,
-          timeout
-        );
-    });
-  }
-
-  public async waitForAttributeChangeTimeout(
-    locator: Locator,
-    timeout: number,
-    attribute: {
-      key: keyof CSSStyleDeclaration;
-      value: string | null;
-    }
-  ) {
-    this.duration = timeout;
-
-    await this.measureTime(async () => {
-      this.element =
-        await this.playwrightExtensions.waitForAttributeChangeTimeout(
-          locator,
-          timeout,
-          attribute
-        );
-    });
   }
 }

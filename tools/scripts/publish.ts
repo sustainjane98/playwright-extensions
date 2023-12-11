@@ -10,10 +10,10 @@
 import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 
-import devkit from '@nx/devkit';
+import * as devkit from '@nx/devkit';
 const { readCachedProjectGraph } = devkit;
 
-function invariant(condition, message) {
+function invariant(condition: boolean, message: string) {
   if (!condition) {
     console.error(message);
     process.exit(1);
@@ -27,7 +27,7 @@ const [, , name, version, tag = 'next'] = process.argv;
 // A simple SemVer validation to validate the version
 const validVersion = /^\d+\.\d+\.\d+(-\w+\.\d+)?/;
 invariant(
-  version && validVersion.test(version),
+  !!version && validVersion.test(version),
   `No version provided or version did not match Semantic Versioning, expected: #.#.#-tag.# or #.#.#, got ${version}.`
 );
 
@@ -35,7 +35,7 @@ const graph = readCachedProjectGraph();
 const project = graph.nodes[name];
 
 invariant(
-  project,
+  !!project,
   `Could not find project "${name}" in the workspace. Is the project.json configured correctly?`
 );
 

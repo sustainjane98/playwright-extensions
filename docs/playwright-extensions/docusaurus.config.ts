@@ -1,6 +1,8 @@
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
+import type { Config, LoadContext, PluginOptions } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import path from 'path';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const config: Config = {
   title: 'Playwright Extensions',
@@ -20,14 +22,29 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   plugins: [
-    async function myPlugin(context, options) {
+    async function myPlugin(context: LoadContext, options: PluginOptions) {
       return {
         name: 'docusaurus-tailwindcss',
-        configurePostCss(postcssOptions) {
-          // Appends TailwindCSS and AutoPrefixer.
-          postcssOptions.plugins.push(require('tailwindcss'));
-          postcssOptions.plugins.push(require('autoprefixer'));
-          return postcssOptions;
+
+        configureWebpack(config, isServer, utils, content) {
+          // Remov
+          config.plugins = config.plugins.slice(1);
+
+          config.module.rules.push({
+            test: /.css$/,
+            exclude: /node_modules/,
+            include: path.resolve(__dirname, 'src'),
+            use: [
+              MiniCssExtractPlugin.loader,
+              'style-loader',
+              'css-loader',
+              'postcss-loader',
+            ],
+          });
+
+          console.log(config);
+
+          return config;
         },
       };
     },

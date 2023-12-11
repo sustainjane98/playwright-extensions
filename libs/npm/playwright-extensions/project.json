@@ -12,8 +12,8 @@
       }
     },
     "publish": {
-      "command": "node tools/scripts/publish.mjs playwright-extensions {args.ver} {args.tag}",
-      "dependsOn": ["build", "docs"]
+      "command": "ts-node tools/scripts/publish.ts playwright-extensions {args.ver} {args.tag}",
+      "dependsOn": ["build"]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

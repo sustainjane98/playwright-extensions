@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "test-app:serve": "nx run test-app:serve",
+    "playwright-extensions:build": "nx run playwright-extensions:build",
     "playwright-extensions:publish": "nx run playwright-extensions:publish",
     "docs/playwright-extensions:build": "nx run docs/playwright-extensions:build",
     "docs/playwright-extensions:start": "nx run docs/playwright-extensions:start",
