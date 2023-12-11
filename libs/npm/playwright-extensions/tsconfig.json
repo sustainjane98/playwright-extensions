@@ -4,6 +4,7 @@
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "declaration": true,
     "lib": ["es2021", "DOM"],
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

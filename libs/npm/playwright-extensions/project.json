@@ -9,6 +9,11 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/playwright-extensions"
+      },
+      "configurations": {
+        "local": {
+          "configFile": "libs/npm/playwright-extensions/vite-local.config.ts"
+        }
       }
     },
     "publish": {

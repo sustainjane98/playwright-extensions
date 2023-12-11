@@ -1,6 +1,7 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { WaitForResults } from '../..';
 import CircuitBreaker from 'opossum';
+import { Exist } from '../enums/exist.enum';
 
 export class WaitForExtensionsPage {
   constructor(private page: Page) {}
@@ -8,27 +9,40 @@ export class WaitForExtensionsPage {
   private async waitForLocatorsTimeout(options: {
     locators: Locator[];
     timeout: number;
-    shouldExist?: boolean;
+    shouldExist?: Exist;
   }) {
     const { locators, timeout } = options;
-    const shouldExist = options?.shouldExist ?? true;
+    const shouldExist = options?.shouldExist ?? Exist.ANY_OR_ONE_EXIST;
     try {
       return await new CircuitBreaker(
         async () => {
-          if (shouldExist)
-            return await Promise.any(
-              locators.map(async (locator) => {
-                await locator.waitFor();
-                return new WaitForResults(locator);
-              })
-            );
+          if (shouldExist === Exist.ANY_OR_ONE_EXIST) {
+            const resolvedLocators = locators.map(async (locator) => {
+              await locator.waitFor();
+              return new WaitForResults(locator);
+            });
+            return await Promise.any(resolvedLocators);
+          }
 
-          return await Promise.any(
-            locators.map(async (locator) => {
-              await expect.soft(locator).toHaveCount(0, { timeout });
-              return WaitForResults.NOT_EXISTS;
-            })
-          );
+          if (shouldExist === Exist.ALL_OR_ONE_EXIST) {
+            const resolvedLocators = locators.map(async (locator) => {
+              await locator.waitFor();
+              return new WaitForResults(locator);
+            });
+            return await Promise.all(resolvedLocators);
+          }
+
+          const resolvedLocators = locators.map(async (locator) => {
+            await expect.soft(locator).toHaveCount(0, { timeout });
+            return WaitForResults.NOT_EXISTS;
+          });
+
+          if (shouldExist === Exist.ANY_OR_ONE_NOT_EXIST) {
+            return await Promise.any(resolvedLocators);
+          }
+
+          const result = await Promise.all(resolvedLocators);
+          return result?.[0];
         },
         { timeout }
       ).fire();
@@ -50,10 +64,15 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForSelectorTimeout(selector: string, timeout: number) {
+  public async waitForSelectorTimeout(
+    selector: string,
+    timeout: number,
+    shouldExist?: Exist
+  ) {
     return await this.waitForLocatorsTimeout({
       locators: [this.page.locator(selector)],
       timeout,
+      shouldExist,
     });
   }
 
@@ -70,8 +89,16 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForTimeout(locator: Locator, timeout: number) {
-    return await this.waitForLocatorsTimeout({ locators: [locator], timeout });
+  public async waitForTimeout(
+    locator: Locator,
+    timeout: number,
+    shouldExist?: Exist
+  ) {
+    return await this.waitForLocatorsTimeout({
+      locators: [locator],
+      timeout,
+      shouldExist,
+    });
   }
 
   /**
@@ -81,7 +108,7 @@ export class WaitForExtensionsPage {
    *
    * const subHeadline = page.locator('html').locator('body').getByText('Test124');
    *
-   * const elementsExists = await playwrightExtensions.waitForAnyTimeout(
+   * const elementsExists = await playwrightExtensions.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
@@ -93,7 +120,15 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForAnyTimeout(locators: Locator[], timeout: number) {
-    return await this.waitForLocatorsTimeout({ locators, timeout });
+  public async waitForMultipleTimeout(
+    locators: Locator[],
+    timeout: number,
+    shouldExist?: Exist
+  ) {
+    return await this.waitForLocatorsTimeout({
+      locators,
+      timeout,
+      shouldExist,
+    });
   }
 }
