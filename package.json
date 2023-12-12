@@ -1,6 +1,6 @@
 {
   "name": "@playwright-extensions/source",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "license": "MIT",
   "scripts": {
     "test-app:serve": "nx run test-app:serve",
@@ -13,12 +13,12 @@
     "docs/playwright-extensions:deploy": "nx run docs/playwright-extensions:deploy",
     "docs/playwright-extensions:clear": "nx run docs/playwright-extensions:clear",
     "semantic-ver": "nx run-many -t version",
-    "semantic-ver:major": "nx run-many -t version --releaseAs=major --syncVersions",
-    "semantic-ver:minor": "nx run-many -t version --releaseAs=minor --syncVersions",
-    "semantic-ver:patch": "nx run-many -t version --releaseAs=patch --syncVersions",
-    "semantic-ver:prepatch": "nx run-many -t version --releaseAs=prepatch  --syncVersions",
-    "semantic-ver:alpha": "nx run-many -t version --releaseAs=prerelease --preid=alpha",
-    "semantic-ver:beta": "nx run-many -t version --releaseAs=prerelease --preid=beta",
+    "semantic-ver:major": "nx run-many -t version --releaseAs=major --syncVersions --verbose",
+    "semantic-ver:minor": "nx run-many -t version --releaseAs=minor --syncVersions --verbose",
+    "semantic-ver:patch": "nx run-many -t version --releaseAs=patch --syncVersions --verbose",
+    "semantic-ver:prepatch": "nx run-many -t version --releaseAs=prepatch  --syncVersions --verbose",
+    "semantic-ver:alpha": "nx run-many -t version --releaseAs=prerelease --preid=alpha --syncVersions --verbose",
+    "semantic-ver:beta": "nx run-many -t version --releaseAs=prerelease --preid=beta --syncVersions --verbose",
     "prepare": "husky install"
   },
   "private": true,

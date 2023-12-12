@@ -1,5 +1,0 @@
-export const enum Exist {
-  ANY_OR_ONE_EXIST = 'ANY_OR_ONE_EXIST ',
-  ALL_OR_ONE_EXIST = 'ALL_OR_ONE_EXIST ',
-  ALL_OR_ONE_NOT_EXIST = 'ALL_OR_ONE_NOT_EXIST ',
-}
