@@ -5,5 +5,3 @@ This file was generated using [@jscutlery/semver](https://github.com/jscutlery/s
 ## 0.0.1 (2023-12-12)
 
 ## 0.0.1 (2023-12-12)
-
-## 0.0.1 (2023-12-12)
