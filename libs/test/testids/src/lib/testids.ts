@@ -1,0 +1,6 @@
+export const enum TestIds {
+  WAIT_FOR_TIMEOUT = 'a7d5862d-8f90-46eb-abef-dbb354b41916',
+  WAIT_FOR_DISAPPEAR = '68936045-67c8-4e60-9f2b-2a0c067998b0',
+  WAIT_FOR_CSS_CHANGE = '6f23dfe3-d727-4f95-8efd-834d5e3f57a9',
+  WAIT_FOR_CSS_CHANGE_COLOR = '91b6147-f8b9-47a0-b42b-4ce4fda43c24',
+}
