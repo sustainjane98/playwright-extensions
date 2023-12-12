@@ -90,7 +90,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForTimeout(subHeadline, 6000, Exist.ALL_OR_ONE_NOT_EXIST);
 
-      start.expectToNotExisting();
+      await start.expectToNotExisting();
       start.checkTheExecutionTime();
       await expect(subHeadline).toHaveCount(0);
     });
