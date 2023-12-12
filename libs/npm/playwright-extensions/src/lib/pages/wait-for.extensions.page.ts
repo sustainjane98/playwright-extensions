@@ -24,15 +24,29 @@ export class WaitForExtensionsPage {
         async () => {
           const isArray = Array.isArray(locators);
 
-          if (!isArray) {
-            await locators.waitFor();
+          if (
+            (!isArray && shouldExist === Exist.ANY_OR_ONE_EXIST) ||
+            shouldExist === Exist.ALL_OR_ONE_EXIST
+          ) {
+            const localLocator = locators as Locator;
+
+            await localLocator.waitFor();
             return new WaitForResults(
-              locators as Locator
+              localLocator as Locator
             ) as WaitForResultType<T>;
           }
 
-          if (shouldExist === Exist.ANY_OR_ONE_EXIST) {
-            const resolvedLocators = locators.map(async (locator) => {
+          if (!isArray && shouldExist === Exist.ALL_OR_ONE_NOT_EXIST) {
+            const localLocator = locators as Locator;
+
+            await expect.soft(localLocator).toBeHidden({ timeout: timeout });
+            return WaitForResults.NOT_EXISTS as WaitForResultType<T>;
+          }
+
+          const arrayLocator = locators as Locator[];
+
+          if (isArray && shouldExist === Exist.ANY_OR_ONE_EXIST) {
+            const resolvedLocators = arrayLocator.map(async (locator) => {
               await locator.waitFor();
               return new WaitForResults(locator);
             });
@@ -41,25 +55,23 @@ export class WaitForExtensionsPage {
             )) as WaitForResultType<T>;
           }
 
-          if (shouldExist === Exist.ALL_OR_ONE_EXIST) {
-            if (isArray) {
-              const resolvedLocators = locators.map(async (locator) => {
-                await locator.waitFor();
-                return new WaitForResults(locator);
-              });
-              return (await Promise.all(
-                resolvedLocators
-              )) as WaitForResultType<T>;
-            }
+          if (isArray && (shouldExist as Exist) === Exist.ALL_OR_ONE_EXIST) {
+            const resolvedLocators = locators.map(async (locator) => {
+              await locator.waitFor();
+              return new WaitForResults(locator);
+            });
+            return (await Promise.all(
+              resolvedLocators
+            )) as WaitForResultType<T>;
           }
 
-          const resolvedLocators = locators.map(async (locator) => {
-            await expect.soft(locator).toBeHidden({ timeout: timeout });
-            return WaitForResults.NOT_EXISTS as unknown as WaitForResultType<T>;
+          const resolvedLocators = arrayLocator.map(async (locator) => {
+            await expect.soft(locator).toBeHidden({ timeout: timeout + 2000 });
+            return WaitForResults.NOT_EXISTS;
           });
 
           const result = await Promise.all(resolvedLocators);
-          return result?.[0];
+          return result?.[0] as WaitForResultType<T>;
         },
         { timeout }
       ).fire();
