@@ -13,7 +13,8 @@ test.describe('Wait For Extensions Test', () => {
   test.describe('Combined Locators', () => {
     let subHeadline: Locator | null = null;
 
-    test.beforeEach(({ page }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    test.beforeEach(({ page, waitingBeforeStart }) => {
       subHeadline = page.locator('html').locator('body').getByText('Test124');
     });
 
@@ -24,7 +25,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitForTimeout(
+      await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
@@ -110,7 +111,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitForTimeout(
+      await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
         6000
       );
