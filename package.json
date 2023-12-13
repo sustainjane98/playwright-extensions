@@ -1,12 +1,15 @@
 {
   "name": "@playwright-extensions/source",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "license": "MIT",
   "scripts": {
     "test-app:serve": "nx run test-app:serve",
     "playwright-extensions:build": "nx run playwright-extensions:build",
     "playwright-extensions:build-local": "nx run playwright-extensions:build:local",
-    "playwright-extensions:publish": "nx run playwright-extensions:publish",
+    "playwright-extensions:publish:canary": "nx run playwright-extensions:publish --tag canary",
+    "playwright-extensions:publish": "nx run playwright-extensions:publish --tag canary",
+    "playwright-extensions:publish:stable": "nx run playwright-extensions:publish --tag stable ",
+    "playwright-extensions:publish:next": "nx run playwright-extensions:publish --tag next",
     "docs/playwright-extensions:build": "nx run docs/playwright-extensions:build",
     "docs/playwright-extensions:start": "nx run docs/playwright-extensions:start",
     "docs/playwright-extensions:serve": "nx run docs/playwright-extensions:serve",
