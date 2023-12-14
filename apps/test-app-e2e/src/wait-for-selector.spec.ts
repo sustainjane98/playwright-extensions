@@ -1,5 +1,5 @@
 import { expect, mergeTests } from '@playwright/test';
-import playwrightExtensions from 'playwright-extensions';
+import {playwrightExtensions} from 'playwright-extensions';
 import { common } from '@test/pages';
 
 const test = mergeTests(playwrightExtensions, common);

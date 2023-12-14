@@ -1,7 +1,7 @@
 import { Locator, expect, mergeTests } from '@playwright/test';
 import { common } from '@test/pages';
 import { TestIds } from '@test/ids';
-import playwrightExtensions, { WAIT_FOR } from 'playwright-extensions';
+import { playwrightExtensions } from 'playwright-extensions';
 
 const test = mergeTests(common, playwrightExtensions);
 
@@ -27,7 +27,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -79,7 +79,7 @@ test.describe('Wait For Extensions Test', () => {
         [subHeadline, page.locator('div.notExist')],
         {timeout: 6000,
           state: "hidden",
-        waitForMultiple: WAIT_FOR.ALL}
+        waitForAll: true}
       );
 
 
@@ -117,7 +117,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-       {timeout:  6000, waitForMultiple: WAIT_FOR.ANY}
+       {timeout:  6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -166,7 +166,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -211,7 +211,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [input, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -259,7 +259,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [input, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -311,7 +311,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -362,7 +362,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -410,7 +410,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [imgTag, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();
@@ -461,7 +461,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForMultiple: WAIT_FOR.ANY}
+        {timeout: 6000, waitForAll: false}
       );
 
       await start.expectToExisting();

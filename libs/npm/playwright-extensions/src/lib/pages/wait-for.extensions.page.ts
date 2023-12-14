@@ -1,29 +1,19 @@
 import { Locator, Page } from '@playwright/test';
-import { WaitForResults } from '../..';
-import { WAIT_FOR } from '../enums/wait-for.enum';
-
-type CalcBoolean<M> = M extends "hidden" ? false : M extends "detached" ? false : true;
-
-export type WaitForResultType<T, M extends Required<Parameters<Locator["waitFor"]>>[0]["state"]> = T extends Array<Locator>
-  ? WaitForResults<Locator, CalcBoolean<M>>[] | WaitForResults<null, CalcBoolean<M>> | WaitForResults<Locator, CalcBoolean<M>>
-  : T extends Locator
-  ? WaitForResults<Locator, CalcBoolean<M>> | WaitForResults<null, CalcBoolean<M>>
-  : never;
-
-
-type Options<STATE extends Required<Parameters<Locator["waitFor"]>>[0]["state"] = Required<Parameters<Locator["waitFor"]>>[0]["state"]> = Omit<Required<Parameters<Locator["waitFor"]>>[0], "state"> & {
-  state?: STATE,
-  waitForMultiple?: WAIT_FOR
-};
+import {  WaitForResults } from '../..';
+import { WaitForResultType } from '../types/wait-for-results.type';
+import { PlaywrightOptionsExtended } from '../types/playwright-options-extended.type';
+import { WAIT_FOR_ALL_RESOLVER } from '../types/wait-for-all-resolver.type';
 
 export class WaitForExtensionsPage {
   constructor(private page: Page) {}
 
-  private async waitForLocatorsTimeout<T extends Locator | Locator[], M extends Options>(
+  private async waitForLocatorsTimeout<T extends Locator | Locator[], M extends PlaywrightOptionsExtended>(
     locators: T,
     options?: M,
-  ): Promise<WaitForResultType<T, M["state"]>> {
-    const waitFor = options?.waitForMultiple ?? WAIT_FOR.ALL;
+  ): Promise<WaitForResultType<T, M["state"], WAIT_FOR_ALL_RESOLVER<M>>> {
+    const waitFor = options?.waitForAll ?? true;
+
+    type waitForAll = WAIT_FOR_ALL_RESOLVER<M>
 
     if(options && !options?.state) {
       options = {...options, state: "visible"};
@@ -40,7 +30,7 @@ export class WaitForExtensionsPage {
 
             await localLocator.waitFor(options);
             return (isHidden ? WaitForResults.NOT_EXISTS(localLocator, !isHidden) : WaitForResults.EXISTS(localLocator as Locator, !isHidden
-            )) as WaitForResultType<T, M["state"]>;
+            )) as WaitForResultType<T, M["state"], waitForAll>;
           }
 
 
@@ -52,17 +42,17 @@ export class WaitForExtensionsPage {
             });
 
 
-            if(waitFor === WAIT_FOR.ANY) {
+            if(waitFor === false) {
               return (await Promise.any(
                 resolvedLocators
-              )) as WaitForResultType<T, M["state"]>;
+              )) as WaitForResultType<T, M["state"], waitForAll>;
             }
 
             const result = await Promise.all(resolvedLocators);
-            return result?.[0] as WaitForResultType<T, M["state"]>;
+            return result?.[0] as WaitForResultType<T, M["state"], waitForAll>;
 
     } catch (err) {
-      return WaitForResults.TIMEOUT(!isHidden) as WaitForResultType<T, M["state"]>;
+      return WaitForResults.TIMEOUT(!isHidden) as WaitForResultType<T, M["state"], waitForAll>;;
     }
   }
 
@@ -82,7 +72,7 @@ export class WaitForExtensionsPage {
    */
   public async waitForSelector(
     selector: string,
-    options: Omit<Options, "waitForMultiple">
+    options: Omit<PlaywrightOptionsExtended, "waitForAll">
   ) {
     return await this.waitForLocatorsTimeout(
       this.page.locator(selector),
@@ -106,7 +96,7 @@ export class WaitForExtensionsPage {
    */
   public async waitFor(
     locator: Locator,
-    options: Omit<Options, "waitForMultiple">
+    options: Omit<PlaywrightOptionsExtended, "waitForAll">
   ) {
     return await this.waitForLocatorsTimeout(
       locator, options);
@@ -119,7 +109,7 @@ export class WaitForExtensionsPage {
    *
    * const subHeadline = page.locator('html').locator('body').getByText('Test124');
    *
-   * const elementsExists = (await playwrightExtensions.waitForMultipleTimeout(
+   * const elementsExists = (await playwrightExtensions.waitForTimeout(
         [subHeadline, page.locator('div.notExist')],
         {timeout: 6000, state: "visible", shouldExist: WAIT_FOR.ALL}
       )).isExisting();
@@ -131,15 +121,13 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForMultiple<M extends Options>(
+  public async waitForMultiple(
     locators: Locator[],
-    options: M,
+    options: PlaywrightOptionsExtended,
   ) {
-   return await this.waitForLocatorsTimeout(
+   return (await this.waitForLocatorsTimeout(
      locators,
-     options
-    );
-
-
+      options
+    ));
   }
 }

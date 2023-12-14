@@ -12,7 +12,7 @@ export class WaitForResults<T extends Locator | null, M extends boolean = boolea
     return this._status;
   }
 
-  isExisting(options?: M extends false ? {includeTimeout: boolean} : undefined): boolean {
+  isExisting(options?: M extends false ? {includeTimeout: boolean} : never): boolean {
     if(options?.includeTimeout)
     return (
       (this.shouldExist &&
@@ -24,7 +24,7 @@ export class WaitForResults<T extends Locator | null, M extends boolean = boolea
     return this.status !== 'NOT_EXISTS' && !this.isTimeouted()
   }
 
-  isNotExisting(options?: M extends true ? {includeTimeout: boolean} : undefined) {
+  isNotExisting(options?: M extends true ? {includeTimeout: boolean} : never) {
 
     if(options?.includeTimeout)
     return (
