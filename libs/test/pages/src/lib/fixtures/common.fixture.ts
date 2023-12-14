@@ -15,9 +15,8 @@ export const common = base.extend<CommonFixtures>({
   waitingBeforeStart: async ({page}, use)=>{
     await page.goto("/")
     const pe = new PlaywrightExtensionsPage(page);
-    await pe.waitForMultipleTimeout([page.locator("div.notExist"), page.locator("div.notExist2")], 6000)
+    await pe.waitForMultiple([page.locator("div.notExist"), page.locator("div.notExist2")], {timeout: 6000})
     await page.goto("/")
     await use(null);
-
   }
 });

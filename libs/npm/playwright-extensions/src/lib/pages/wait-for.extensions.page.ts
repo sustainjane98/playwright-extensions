@@ -1,128 +1,115 @@
-import { Locator, Page, expect } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 import { WaitForResults } from '../..';
-import { Exist } from '../enums/exist.enum';
+import { WAIT_FOR } from '../enums/wait-for.enum';
 
-export type WaitForResultType<T> = T extends Array<Locator>
-  ? WaitForResults<Locator>[] | WaitForResults<string> | WaitForResults<Locator>
+type CalcBoolean<M> = M extends "hidden" ? false : M extends "detached" ? false : true;
+
+export type WaitForResultType<T, M extends Required<Parameters<Locator["waitFor"]>>[0]["state"]> = T extends Array<Locator>
+  ? WaitForResults<Locator, CalcBoolean<M>>[] | WaitForResults<null, CalcBoolean<M>> | WaitForResults<Locator, CalcBoolean<M>>
   : T extends Locator
-  ? WaitForResults<Locator> | WaitForResults<string>
+  ? WaitForResults<Locator, CalcBoolean<M>> | WaitForResults<null, CalcBoolean<M>>
   : never;
+
+
+type Options<STATE extends Required<Parameters<Locator["waitFor"]>>[0]["state"] = Required<Parameters<Locator["waitFor"]>>[0]["state"]> = Omit<Required<Parameters<Locator["waitFor"]>>[0], "state"> & {
+  state?: STATE,
+  waitForMultiple?: WAIT_FOR
+};
 
 export class WaitForExtensionsPage {
   constructor(private page: Page) {}
 
-  private async waitForLocatorsTimeout<T extends Locator | Locator[]>(options: {
-    locators: T;
-    timeout: number;
-    shouldExist?: Exist;
-  }): Promise<WaitForResultType<T>> {
-    const { locators, timeout } = options;
-    const shouldExist = options?.shouldExist ?? Exist.ANY_OR_ONE_EXIST;
+  private async waitForLocatorsTimeout<T extends Locator | Locator[], M extends Options>(
+    locators: T,
+    options?: M,
+  ): Promise<WaitForResultType<T, M["state"]>> {
+    const waitFor = options?.waitForMultiple ?? WAIT_FOR.ALL;
+
+    if(options && !options?.state) {
+      options = {...options, state: "visible"};
+    }
+
+    const isHidden = options?.state === "hidden" || options?.state === "detached"
+
     try {
           const isArray = Array.isArray(locators);
 
-          if (
-            (!isArray && shouldExist === Exist.ANY_OR_ONE_EXIST) ||
-            shouldExist === Exist.ALL_OR_ONE_EXIST
-          ) {
+          if
+            (!isArray) {
             const localLocator = locators as Locator;
 
-            await localLocator.waitFor({state: "visible", timeout});
-            return new WaitForResults(
-              localLocator as Locator
-            ) as WaitForResultType<T>;
+            await localLocator.waitFor(options);
+            return (isHidden ? WaitForResults.NOT_EXISTS(localLocator, !isHidden) : WaitForResults.EXISTS(localLocator as Locator, !isHidden
+            )) as WaitForResultType<T, M["state"]>;
           }
 
-          if (!isArray && shouldExist === Exist.ALL_OR_ONE_NOT_EXIST) {
-            const localLocator = locators as Locator;
-
-            await localLocator.waitFor({state: "hidden", timeout});
-            return WaitForResults.NOT_EXISTS as WaitForResultType<T>;
-          }
 
           const arrayLocator = locators as Locator[];
 
-          if (isArray && shouldExist === Exist.ANY_OR_ONE_EXIST) {
             const resolvedLocators = arrayLocator.map(async (locator) => {
-              await locator.waitFor({state: "visible", timeout});
-              return new WaitForResults(locator);
+              await locator.waitFor(options);
+              return isHidden ? WaitForResults.NOT_EXISTS(locator, !isHidden) : WaitForResults.EXISTS(locator, !isHidden);
             });
-            return (await Promise.any(
-              resolvedLocators
-            )) as WaitForResultType<T>;
-          }
 
-          if (isArray && (shouldExist as Exist) === Exist.ALL_OR_ONE_EXIST) {
-            const resolvedLocators = locators.map(async (locator) => {
-              await locator.waitFor({timeout, state: "visible"});
-              return new WaitForResults(locator);
-            });
-            return (await Promise.all(
-              resolvedLocators
-            )) as WaitForResultType<T>;
-          }
 
-          const resolvedLocators = arrayLocator.map(async (locator) => {
-            await locator.waitFor({timeout, state: "hidden"});
-            return WaitForResults.NOT_EXISTS;
-          });
+            if(waitFor === WAIT_FOR.ANY) {
+              return (await Promise.any(
+                resolvedLocators
+              )) as WaitForResultType<T, M["state"]>;
+            }
 
-          const result = await Promise.all(resolvedLocators);
-          return result?.[0] as WaitForResultType<T>;
+            const result = await Promise.all(resolvedLocators);
+            return result?.[0] as WaitForResultType<T, M["state"]>;
 
     } catch (err) {
-      return WaitForResults.TIMEOUT as WaitForResultType<T>;
+      return WaitForResults.TIMEOUT(!isHidden) as WaitForResultType<T, M["state"]>;
     }
   }
 
   /**
    * Waits for a selector for a specific timeout, continues execution with a non test blocking error afterwards.
+   * You can define the state of the element as well.
    *
    * ```ts
-   * const accountButton = await playwrightExtensions.waitForSelectorTimeout('*[data-testid="account-login-button"]', 2500);
+   * const accountButtonIsHidden = (await playwrightExtensions.waitForSelector('*[data-testid="account-login-button"]', {timeout: 2500, state: "hidden"})).isNotExisting();
    *
-   * if (accountButton) {
-   *  // Add Testlogic for handling AccountButton here
+   * if (accountButtonIsHidden) {
+   *  // Add Testlogic for handling accountButtonIsHidden here
    * }
    *
    * // Continue with test execution here
    * ```
    */
-  public async waitForSelectorTimeout(
+  public async waitForSelector(
     selector: string,
-    timeout: number,
-    shouldExist?: Exist
+    options: Omit<Options, "waitForMultiple">
   ) {
-    return await this.waitForLocatorsTimeout({
-      locators: this.page.locator(selector),
-      timeout,
-      shouldExist,
-    });
+    return await this.waitForLocatorsTimeout(
+      this.page.locator(selector),
+      options
+    );
   }
 
   /**
    * Waits for a locator for a specific timeout, continues execution without error afterwards.
+   * You can define the state of the element as well.
    *
    * ```ts
-   * const accountButtonExists = await playwrightExtensions.waitForTimeout(this.page.getByTestId("account-login-button"), 2500);
+   * const accountButtonDetached = await playwrightExtensions.waitFor(this.page.getByTestId("account-login-button"), {timeout: 2500, state: "detached"}).isNotExisting();
    *
-   * if (accountButtonExists) {
-   *  // Add Testlogic for handling AccountButton here
+   * if (accountButtonDetached) {
+   *  // Add Testlogic for handling accountButton is detached here
    * }
    *
    * // Continue with test execution here
    * ```
    */
-  public async waitForTimeout(
+  public async waitFor(
     locator: Locator,
-    timeout: number,
-    shouldExist?: Exist
+    options: Omit<Options, "waitForMultiple">
   ) {
-    return await this.waitForLocatorsTimeout({
-      locators: locator,
-      timeout,
-      shouldExist,
-    });
+    return await this.waitForLocatorsTimeout(
+      locator, options);
   }
 
   /**
@@ -132,10 +119,10 @@ export class WaitForExtensionsPage {
    *
    * const subHeadline = page.locator('html').locator('body').getByText('Test124');
    *
-   * const elementsExists = await playwrightExtensions.waitForMultipleTimeout(
+   * const elementsExists = (await playwrightExtensions.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        6000
-      );
+        {timeout: 6000, state: "visible", shouldExist: WAIT_FOR.ALL}
+      )).isExisting();
    *
    * if (elementsExists) {
    *  // Add Testlogic for handling when Elements exists
@@ -144,15 +131,15 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForMultipleTimeout(
+  public async waitForMultiple<M extends Options>(
     locators: Locator[],
-    timeout: number,
-    shouldExist?: Exist
+    options: M,
   ) {
-    return await this.waitForLocatorsTimeout({
-      locators,
-      timeout,
-      shouldExist,
-    });
+   return await this.waitForLocatorsTimeout(
+     locators,
+     options
+    );
+
+
   }
 }

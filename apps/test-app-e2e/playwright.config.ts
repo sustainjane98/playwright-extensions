@@ -25,8 +25,9 @@ export default defineConfig({
     testIdAttribute: 'data-testid',
     video: { mode: 'on' },
     screenshot: { mode: 'on' },
-  },
 
+  },
+  timeout: 60 * 1000,
   workers: '70%',
   reporter: [
     ['list'],

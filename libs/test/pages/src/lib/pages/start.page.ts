@@ -1,6 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test';
 import {
-  Exist,
   PlaywrightExtensionsPage,
   WaitForResults,
 } from 'playwright-extensions';
@@ -9,7 +8,7 @@ export class StartPage {
   private element:
     | WaitForResults<Locator>
     | WaitForResults<Locator>[]
-    | WaitForResults<string>
+    | WaitForResults<null>
     | null = null;
   private executionTime: number = 0;
   private duration: number = 0;
@@ -74,50 +73,44 @@ export class StartPage {
     );
   }
 
-  public async waitForSelectorTimeout(
+  public async waitForSelector(
     selector: string,
-    timeout: number,
-    shouldExist?: Exist
+    options: Parameters<typeof this.playwrightExtensions.waitForSelector>[1]
   ) {
-    this.duration = timeout;
+    this.duration = options?.timeout ?? 0;
 
     await this.measureTime(async () => {
-      this.element = await this.playwrightExtensions.waitForSelectorTimeout(
+      this.element = await this.playwrightExtensions.waitForSelector(
         selector,
-        timeout,
-        shouldExist
+        options
       );
     });
   }
 
   public async waitForMultipleTimeout(
     locators: Locator[],
-    timeout: number,
-    shouldExist?: Exist
+    options: Parameters<typeof this.playwrightExtensions.waitForMultiple>[1]
   ) {
-    this.duration = timeout;
+    this.duration = options?.timeout ?? 0;
 
     await this.measureTime(async () => {
-      this.element = await this.playwrightExtensions.waitForMultipleTimeout(
+      this.element = await this.playwrightExtensions.waitForMultiple(
         locators,
-        timeout,
-        shouldExist
+        options
       );
     });
   }
 
-  public async waitForTimeout(
+  public async waitFor(
     locator: Locator,
-    timeout: number,
-    shouldExist?: Exist
+    options: Parameters<typeof this.playwrightExtensions.waitFor>[1]
   ) {
-    this.duration = timeout;
+    this.duration = options?.timeout ?? 0;
 
     await this.measureTime(async () => {
-      this.element = await this.playwrightExtensions.waitForTimeout(
+      this.element = await this.playwrightExtensions.waitFor(
         locator,
-        timeout,
-        shouldExist
+        options
       );
     });
   }
