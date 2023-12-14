@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { version } from './package.json'
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/playwright-extensions',
@@ -34,6 +35,11 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
+      output: {
+        entryFileNames: `[name].${version}.js`,
+        chunkFileNames: `[name].${version}.js`,
+        assetFileNames: `[name].${version}.[ext]`
+    },
       // External packages that should not be bundled into your library.
       external: ['@playwright/test'],
     },
