@@ -70,10 +70,10 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForSelector(
+  public async waitForSelector<M extends Omit<PlaywrightOptionsExtended, "waitForAll">>(
     selector: string,
-    options: Omit<PlaywrightOptionsExtended, "waitForAll">
-  ) {
+    options: M
+  ): Promise<WaitForResultType<Locator, M["state"], boolean>>{
     return await this.waitForLocatorsTimeout(
       this.page.locator(selector),
       options
@@ -94,10 +94,10 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitFor(
+  public async waitFor<M extends Omit<PlaywrightOptionsExtended, "waitForAll">>(
     locator: Locator,
-    options: Omit<PlaywrightOptionsExtended, "waitForAll">
-  ) {
+    options: M
+  ): Promise<WaitForResultType<Locator, M["state"], boolean>> {
     return await this.waitForLocatorsTimeout(
       locator, options);
   }
@@ -121,10 +121,10 @@ export class WaitForExtensionsPage {
    * // Continue with test execution here
    * ```
    */
-  public async waitForMultiple(
-    locators: Locator[],
-    options: PlaywrightOptionsExtended,
-  ) {
+  public async waitForMultiple<T extends Locator | Locator[], M extends PlaywrightOptionsExtended>(
+    locators: T,
+    options: M,
+  ): Promise<WaitForResultType<T, M["state"], WAIT_FOR_ALL_RESOLVER<M>>> {
    return (await this.waitForLocatorsTimeout(
      locators,
       options

@@ -1,8 +1,8 @@
 {
   "name": "playwright-extensions",
-  "version": "0.0.1-alpha.6",
+  "version": "0.0.1-alpha.7",
   "dependencies": {},
-  "main": "./index.js",
-  "module": "./index.mjs",
+  "main": "./index.__LIB_VERSION__.js",
+  "module": "./index.__LIB_VERSION__.mjs",
   "typings": "./index.d.ts"
 }
