@@ -1,66 +1,28 @@
 {
   "name": "docs/playwright-extensions",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "docs/playwright-extensions/src",
+  "sourceRoot": "docs/playwright-extensions",
   "projectType": "application",
   "targets": {
-    "docusaurus": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus"
-      }
-    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus build --out-dir ../../dist/docs/playwright-extensions"
+        "command": "astro build --outDir ../../dist/docs/playwright-extensions"
       }
-    },
-    "start": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus start"
-      },
-      "dependsOn": ["build"]
-    },
-    "clear": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "npx docusaurus clear dist/docs/playwright-extensions"
-      }
-    },
-    "deploy": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus deploy --out-dir ../../dist/docs/playwright-extensions"
-      },
-      "dependsOn": ["build"]
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "docs/playwright-extensions",
-        "command": "npx docusaurus serve --dir ../../dist/docs/playwright-extensions/build"
+        "command": "astro dev"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/playwright-extensions/**/*.ts",
-          "libs/playwright-extensions/package.json"
-        ]
-      }
-    },
-    "version": {
-      "executor": "@jscutlery/semver:version",
-      "options": {
-        "preset": "conventionalcommits"
+        "lintFilePatterns": ["apps/test-app/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },
