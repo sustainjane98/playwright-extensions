@@ -20,9 +20,10 @@
     },
     "deploy": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
         "cwd": "docs/playwright-extensions",
-        "command": "gh-pages -d build"
+        "command": "gh-pages -d ../../dist/docs/playwright-extensions"
       }
     },
     "lint": {

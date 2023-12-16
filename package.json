@@ -13,6 +13,7 @@
     "playwright-extensions:publish:latest": "nx run playwright-extensions:publish --tag latest",
     "docs/playwright-extensions:build": "nx run docs/playwright-extensions:build",
     "docs/playwright-extensions:serve": "nx run docs/playwright-extensions:serve",
+    "docs/playwright-extensions:deploy": "nx run docs/playwright-extensions:deploy",
     "semantic-ver": "nx run-many -t version",
     "semantic-ver:major": "nx run-many -t version --releaseAs=major --syncVersions --skipProjectChangelog --skipRootChangelog --verbose",
     "semantic-ver:minor": "nx run-many -t version --releaseAs=minor --syncVersions --skipProjectChangelog --skipRootChangelog --verbose",
