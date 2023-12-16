@@ -18,6 +18,13 @@
         "command": "astro dev"
       }
     },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "docs/playwright-extensions",
+        "command": "gh-pages -d build"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
