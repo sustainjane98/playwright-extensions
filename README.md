@@ -1,3 +1,5 @@
+> :warning: **Pre-release and Alpha Warning**: This library is currently in pre-release and alpha stage. It is not recommended for use in production environments as it may contain bugs, incomplete features, and is subject to significant changes.
+
 # Playwright Extensions Library
 
 ## Overview
