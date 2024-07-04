@@ -27,13 +27,13 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/sustainjane98/playwright-extensions/edit/main/apps/documentation/docs/',
+            'https://github.com/sustainjane98/playwright-extensions/edit/main/apps/documentation/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/sustainjane98/playwright-extensions/edit/main/apps/documentation/blog/',
+            'https://github.com/sustainjane98/playwright-extensions/edit/main/apps/documentation/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
