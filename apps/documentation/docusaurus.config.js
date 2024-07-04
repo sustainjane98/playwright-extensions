@@ -8,13 +8,15 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Playwright Extensions',
   tagline: 'Extensions for Playwright',
-  url: 'https://playwright-extensions.com',
-  baseUrl: '/',
+  url: 'https://sustainjane98.github.io',
+  baseUrl: '/playwright-extensions/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/icon.png',
+  projectName: 'sustainjane98.github.io',
   organizationName: 'sustainjane98', // Usually your GitHub org/user name.
-  projectName: 'playwright-extensions', // Usually your repo name.
+  deploymentBranch: 'main',
+  trailingSlash: false,
 
   presets: [
     [
@@ -53,7 +55,7 @@ const config = {
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
-            href: 'https://github.com/sutainjane98/playwright-extensions',
+            href: 'https://github.com/sustainjane98/playwright-extensions',
             label: 'GitHub',
             position: 'right',
           },

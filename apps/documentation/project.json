@@ -7,13 +7,28 @@
     "build": {
       "executor": "@nx-plus/docusaurus:browser",
       "options": {
-        "outputPath": "dist/apps/apps/documentation/@playwright-extensions/documentation"
+        "outputPath": "dist/apps/documentation"
+      },
+      "configurations": {
+        "production": {
+          "executor": "nx:run-commands",
+          "options": {
+            "command": "docusaurus build -- --prod --baseHref=/playwright-extensions/ --out-dir ../../dist/apps/documentation"
+          }
+        }
       }
     },
     "serve": {
       "executor": "@nx-plus/docusaurus:dev-server",
       "options": {
         "port": 3000
+      }
+    },
+    "deploy": {
+      "executor": "@nx-plus/docusaurus:deploy",
+      "options": {
+        "outputPath": "dist/apps/apps/documentation/@playwright-extensions/documentation",
+        "ghPagesBranch": "gh-pages"
       }
     }
   },
