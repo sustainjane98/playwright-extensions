@@ -11,8 +11,21 @@ To get started, you'll need to install Playwright Utils using npm. Run the follo
 ```bash
 npm install playwright-extensions
 ```
+********
+## Getting Started
 
-## Features
+Let's discover how to get started with **[Playwright](https://playwright.dev/) and Playwright Extensions**.
+
+Get started by **creating a new Playwright Project and add Playwright Extensions to it**.
+
+Or try **adding Playwright Extensions to a existing with Playwright Project**.
+
+### What you'll need
+
+- [Node.js](https://nodejs.org/en/download/) version 20:
+  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+- [Playwright](https://playwright.dev/) latest stable version
+- [Playwright Extensions](https://www.npmjs.com/package/playwright-extensions) latest stable version
 
 ## Contributions
 
