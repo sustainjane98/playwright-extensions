@@ -11,31 +11,40 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/Enthusiastic-amico.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Playwright-extensions is very user-friendly, making web automation with
+        Playwright even simpler. It adds useful commands, so you write less code
+        to handle common tasks like waiting for a maybe existing element easier
+        and more efficient.
       </>
     ),
   },
   {
     title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/Light bulb-cuate.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Playwright-extensions is very easy to use, simplifying Playwright's
+        already straightforward framework. It focuses on just four main methods,
+        making the logic easy to follow. The extensions build on Playwright's
+        core concepts of Pages and Test Runners, which are deeply integrated,
+        ensuring a smooth and intuitive experience for web automation tasks.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Powered by TypeScript',
+    Svg: require('@site/static/img/Mobile testing-pana.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Playwright-extensions uses TypeScript to enable powerful autocomplete
+        features. This provides strong typing, making methods and properties
+        well-defined and easily accessible. As a result, your IDE can offer
+        intelligent code completions, simplifying the coding process and
+        reducing errors. This integration enhances productivity and ensures
+        cleaner, more reliable code.
       </>
     ),
   },
