@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/Enthusiastic-amico.svg').default,
     description: (
       <>
-        Playwright-extensions is very user-friendly, making web automation with
+        Playwright Extensions is very user-friendly, making web automation with
         Playwright even simpler. It adds useful commands, so you write less code
         to handle common tasks like waiting for a maybe existing element easier
         and more efficient.
@@ -26,7 +26,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/Light bulb-cuate.svg').default,
     description: (
       <>
-        Playwright-extensions is very easy to use, simplifying Playwright's
+        Playwright Extensions is very easy to use, simplifying Playwright's
         already straightforward framework. It focuses on just four main methods,
         making the logic easy to follow. The extensions build on Playwright's
         core concepts of Pages and Test Runners, which are deeply integrated,
@@ -39,7 +39,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/Mobile testing-pana.svg').default,
     description: (
       <>
-        Playwright-extensions uses TypeScript to enable powerful autocomplete
+        Playwright Extensions uses TypeScript to enable powerful autocomplete
         features. This provides strong typing, making methods and properties
         well-defined and easily accessible. As a result, your IDE can offer
         intelligent code completions, simplifying the coding process and
