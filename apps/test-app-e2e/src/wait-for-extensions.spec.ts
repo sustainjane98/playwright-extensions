@@ -27,7 +27,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -41,7 +41,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 2500});
+      await start.waitFor(subHeadline, { timeout: 2500 });
 
       await start.expectToTimeout();
       start.checkTheExecutionTime();
@@ -52,7 +52,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000});
+      await start.waitFor(subHeadline, { timeout: 6000 });
 
       start.expectToExisting();
       start.checkTheExecutionTime();
@@ -75,14 +75,10 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-     await start.waitForMultipleTimeout(
+      await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000,
-          state: "hidden",
-        waitForAll: true}
+        { timeout: 6000, state: 'hidden', waitForAll: true }
       );
-
-
 
       await start.expectToNotExisting();
       start.checkTheExecutionTime();
@@ -93,7 +89,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000, state: "hidden"});
+      await start.waitFor(subHeadline, { timeout: 6000, state: 'hidden' });
 
       await start.expectToNotExisting();
       start.checkTheExecutionTime();
@@ -117,7 +113,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-       {timeout:  6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -131,7 +127,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 2500});
+      await start.waitFor(subHeadline, { timeout: 2500 });
 
       await start.expectToTimeout();
       start.checkTheExecutionTime();
@@ -142,7 +138,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000});
+      await start.waitFor(subHeadline, { timeout: 6000 });
 
       start.expectToExisting();
       start.checkTheExecutionTime();
@@ -166,7 +162,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -180,7 +176,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 2500});
+      await start.waitFor(subHeadline, { timeout: 2500 });
 
       await start.expectToTimeout();
       start.checkTheExecutionTime();
@@ -191,7 +187,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000});
+      await start.waitFor(subHeadline, { timeout: 6000 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -211,7 +207,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [input, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -228,7 +224,7 @@ test.describe('Wait For Extensions Test', () => {
 
       test.fail();
 
-      await start.waitFor(input, {timeout: 2500});
+      await start.waitFor(input, { timeout: 2500 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -239,7 +235,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
-      await start.waitFor(input, {timeout: 6000});
+      await start.waitFor(input, { timeout: 6000 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -259,7 +255,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [input, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -276,7 +272,7 @@ test.describe('Wait For Extensions Test', () => {
 
       test.fail();
 
-      await start.waitFor(input, {timeout: 2500});
+      await start.waitFor(input, { timeout: 2500 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -287,7 +283,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!input) return;
 
-      await start.waitFor(input, {timeout: 6000});
+      await start.waitFor(input, { timeout: 6000 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -311,7 +307,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -327,7 +323,7 @@ test.describe('Wait For Extensions Test', () => {
 
       test.fail();
 
-      await start.waitFor(subHeadline, {timeout: 2500});
+      await start.waitFor(subHeadline, { timeout: 2500 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -338,7 +334,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000});
+      await start.waitFor(subHeadline, { timeout: 6000 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -362,7 +358,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -378,7 +374,7 @@ test.describe('Wait For Extensions Test', () => {
 
       test.fail();
 
-      await start.waitFor(subHeadline, {timeout: 2500});
+      await start.waitFor(subHeadline, { timeout: 2500 });
 
       await start.expectToExisting();
       await start.checkTheExecutionTime();
@@ -389,7 +385,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000});
+      await start.waitFor(subHeadline, { timeout: 6000 });
 
       await start.expectToExisting();
       await start.checkTheExecutionTime();
@@ -410,7 +406,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [imgTag, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -426,7 +422,7 @@ test.describe('Wait For Extensions Test', () => {
 
       test.fail();
 
-      await start.waitFor(imgTag, {timeout: 2500});
+      await start.waitFor(imgTag, { timeout: 2500 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -437,7 +433,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!imgTag) return;
 
-      await start.waitFor(imgTag, {timeout: 6000});
+      await start.waitFor(imgTag, { timeout: 6000 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -461,7 +457,7 @@ test.describe('Wait For Extensions Test', () => {
 
       await start.waitForMultipleTimeout(
         [subHeadline, page.locator('div.notExist')],
-        {timeout: 6000, waitForAll: false}
+        { timeout: 6000, waitForAll: false }
       );
 
       await start.expectToExisting();
@@ -477,7 +473,7 @@ test.describe('Wait For Extensions Test', () => {
 
       test.fail();
 
-      await start.waitFor(subHeadline, {timeout: 2500});
+      await start.waitFor(subHeadline, { timeout: 2500 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
@@ -488,7 +484,7 @@ test.describe('Wait For Extensions Test', () => {
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (!subHeadline) return;
 
-      await start.waitFor(subHeadline, {timeout: 6000});
+      await start.waitFor(subHeadline, { timeout: 6000 });
 
       await start.expectToExisting();
       start.checkTheExecutionTime();
