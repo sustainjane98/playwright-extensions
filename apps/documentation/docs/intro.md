@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Quickstart
 
 Let's discover how to get started with **[Playwright](https://playwright.dev/) and Playwright Extensions**.
 
@@ -19,31 +19,38 @@ Or try **adding Playwright Extensions to a existing with Playwright Project**.
 - [Playwright](https://playwright.dev/) latest stable version
 - [Playwright Extensions](https://www.npmjs.com/package/playwright-extensions) latest stable version
 
-## Generate a new site
+## Start using Playwright Extensions
 
-Generate a new Docusaurus site using the **classic template**.
+If you want to use the Playwright Extensions functions you first have to import the playwrightExtensions [Fixture](https://playwright.dev/docs/test-fixtures).
 
-The classic template will automatically be added to your project after you run the command:
+:information_source: **Recommendation**: When using multiple Fixtures together with Playwright Extensions, we recommend utilizing the `mergeTests` function. This approach ensures that your tests are seamlessly integrated and managed, providing a more efficient and organized testing environment.
 
-```bash
-npm init docusaurus@latest my-website classic
+```js
+import { Locator, mergeTests } from "@playwright/test";
+import { playwrightExtensions, WaitForResultType } from "playwright-extensions";
+
+const test = mergeTests(playwrightExtensions);
 ```
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+## Using the provided Functions
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+This chapter show how you should use the Functions Provided by Playwright-Extensions on a simple example.
 
-## Start your site
+```js
+import { Locator, mergeTests } from "@playwright/test";
+import { playwrightExtensions, WaitForResultType } from "playwright-extensions";
 
-Run the development server:
+const test = mergeTests(playwrightExtensions);
 
-```bash
-cd my-website
-npm run start
+test.describe(("Playwright Extensions example")=> {
+  test("Sample use of Playwright Extensions", ({playwrightExtensions, page})=> {
+    const selector = 'html body h2';
+
+    await start.waitForSelector(selector, {timeout: 6000});
+
+    await start.expectToExisting();
+    start.checkTheExecutionTime();
+    await expect(page.locator(selector)).toBeDefined();
+  })
+})
 ```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.

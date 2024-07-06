@@ -1,0 +1,85 @@
+---
+sidebar_position: 1
+sidebar_label: Waiting for optional Elements
+---
+
+# Waiting for optional Elements
+
+Let's discover the possibility to easily wait for optional available elements. So if it isn't available until a timeout you can skip the part.
+
+## Waiting for single elements
+
+### Wait for Selectors
+
+Playwright Extensions allow you to wait for single elements to appear before interacting with them, ensuring reliable script execution. By using the `waitForSelector` function with a specified timeout, you can wait for elements to become visible and interactable, enhancing the stability and robustness of your automated tests.
+
+#### Usage
+
+```js
+import { expect, mergeTests } from '@playwright/test';
+import {playwrightExtensions} from 'playwright-extensions';
+import { common } from '@test/pages';
+
+const test = mergeTests(playwrightExtensions, common);
+
+test.describe('Wait for Selectors', () => {
+
+  test('Wait for Selector without soft error', async ({ playwrightExtensions, page }) => {
+    const selector = 'html body h2';
+
+    await playwrightExtensions.waitForSelector(selector, { timeout: 6000 });
+
+    await expect(page.locator(selector)).toBeDefined();
+  });
+});
+```
+#### Options
+- <p>`options` [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) (optional)</p>
+  - `timeout` [number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)
+<p>Maximum time in milliseconds. Defaults to 0 - no timeout. Defines the time until the `state` should be true </p>
+  - <p>`state` "attached" | "detached" | "visible" | "hidden"</p>
+  <p>Defaults to `visible`. Can be either:</p>
+    - `attached` - wait for the element to be present in the DOM.
+    - `detached` - wait for the element to be removed from the DOM.
+    - `visible` - wait for the element to be present in the DOM and to be visible.
+    - `hidden` - wait for the element to not be found in the DOM or to be hidden.
+
+
+### Wait for Locators
+
+Playwright Extensions can also wait for locators, providing a powerful way to handle dynamic web content. By leveraging the locator method, you can wait for elements matching a specific locator to appear, ensuring your interactions are precise and reliable. This enhances the flexibility and robustness of your automated scripts when dealing with complex and changing web pages.
+#### Usage
+```js
+import { Locator, expect, mergeTests } from '@playwright/test';
+import { common } from '@test/pages';
+import { TestIds } from '@test/ids';
+import { playwrightExtensions } from 'playwright-extensions';
+
+const test = mergeTests(common, playwrightExtensions);
+
+test.describe('Wait For Extensions Test', () => {
+  test('Wait for any of two subHeadlines Timeout', async ({
+    playwrightExtensions,
+    page,
+  }) => {
+    const subHeadline = page.locator('html').locator('body').getByText('Test124');
+
+    await playwrightExtensions.waitFor(
+      subHeadline,
+      { timeout: 6000 }
+    );
+
+    await expect(subHeadline).toHaveCount(1);
+  });
+});
+```
+#### Options
+- <p>`options` [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) (optional)</p>
+  - `timeout` [number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type)
+<p>Maximum time in milliseconds. Defaults to 0 - no timeout. Defines the time until the `state` should be true </p>
+  - <p>`state` "attached" | "detached" | "visible" | "hidden"</p>
+  <p>Defaults to `visible`. Can be either:</p>
+    - `attached` - wait for the element to be present in the DOM.
+    - `detached` - wait for the element to be removed from the DOM.
+    - `visible` - wait for the element to be present in the DOM and to be visible.
+    - `hidden` - wait for the element to not be found in the DOM or to be hidden.
