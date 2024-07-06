@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_playwright_extensions_source=self.webpackChunk_playwright_extensions_source||[]).push([[955],{262:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/playwright-extensions/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
